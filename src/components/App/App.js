@@ -1,10 +1,12 @@
 import {useState, useEffect} from 'react';
+import Store from '../../store/store';
 import Header from '../Header/Header';
 import FolderList from '../FolderList/FolderList';
 import {fetchData} from '../../utils';
 
 function App() {
   const [data, setData] = useState([]);
+  const [listsState, setListsState] = useState({});
 
   useEffect(() => {
     fetchData()
@@ -17,9 +19,14 @@ function App() {
     <>
       <Header />
       <main>
-        <div className="w-25">
-          <FolderList data={data} />
-        </div>
+        <Store.Provider value={{
+          listsState,
+          setListsState
+        }}>
+          <div className="w-25">
+            <FolderList data={data} />
+          </div>
+        </Store.Provider>
       </main>
     </>
   );
