@@ -8,11 +8,7 @@ function FolderList({data}) {
   return (
     <ul className="list-group">
       {
-        data.map((it) => (
-          <FolderItem key={it.id} item={it}>
-            <FolderList data={it.children} />
-          </FolderItem>
-        ))
+        data.map((it) => <FolderItem key={it.id} item={it} SubList={FolderList} />)
       }
     </ul>
   );
