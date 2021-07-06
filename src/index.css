@@ -10,3 +10,7 @@
 .marker:focus {
   box-shadow: none;
 }
+
+.title {
+  cursor: pointer;
+}
