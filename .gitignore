@@ -11,6 +11,11 @@
 # production
 /build
 
+# code editors
+.idea
+*.sublime*
+.vscode
+
 # misc
 .DS_Store
 .env.local
