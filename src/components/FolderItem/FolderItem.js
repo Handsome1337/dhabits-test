@@ -1,6 +1,6 @@
 import {useState, useContext, useEffect, useRef} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileImage, faBookOpen, faFileArchive } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { faFolder, faFileImage, faBookOpen, faFileArchive } from '@fortawesome/free-solid-svg-icons';
 import Store from '../../store/store';
 import {fetchData} from '../../utils';
 
@@ -37,27 +37,25 @@ function FolderItem({item, SubList}) {
   // если бы это был реальный проект, извлечение расширения надо было бы реализовать по-другому
   // в данном случае не учитывается, что папка может содержать в названии точку
   const fileExt = item.title.split('.').pop();
-  let marker;
+  let faIcon;
 
-  if (['jpg', 'epub', 'zip'].includes(fileExt)) {
-    let icon;
-    if (fileExt === 'jpg') {
-      icon = faFileImage;
-    } else if (fileExt === 'epub') {
-      icon = faBookOpen;
-    } else {
-      icon = faFileArchive;
-    }
-    marker = <FontAwesomeIcon icon={icon} size="xs" />;
-  } else {
-    marker = '▸';
+  switch (fileExt) {
+    case 'jpg':
+      faIcon = faFileImage;
+      break;
+    case 'epub':
+      faIcon = faBookOpen;
+      break;
+    case 'zip':
+      faIcon = faFileArchive;
+      break;
+    default:
+      faIcon = faFolder;
   }
 
-  const toggleActive = () => {
-    if (marker !== '▸') {
-      return;
-    }
+  const icon = <FontAwesomeIcon icon={faIcon} size="xs" />;
 
+  const toggleActive = () => {
     setIsActive((state) => !state);
 
     if (item.children && !children.isSet) {
@@ -68,6 +66,17 @@ function FolderItem({item, SubList}) {
     }
   };
 
+  const button = faIcon === faFolder
+    ? (
+      <button
+        className={`marker${isActive ? ' marker--active' : ''} btn position-absolute p-0`}
+        onClick={toggleActive}
+      >
+        ▸
+      </button>
+    )
+    : null;
+
   const childrenList = isActive && children.list
     ? <SubList data={children.list} />
     : null;
@@ -75,13 +84,9 @@ function FolderItem({item, SubList}) {
   return (
     <>
       <li className="list-group-item border-0 p-1 ps-4">
-        <button
-          className={`marker${isActive ? ' marker--active' : ''} btn position-absolute p-0`}
-          onClick={toggleActive}
-        >
-          {marker}
-        </button>
-        <span className="title">
+        {button}
+        {icon}
+        <span className="title ps-1">
           {item.title}
         </span>
         {childrenList}
