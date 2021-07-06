@@ -13,6 +13,7 @@ function FolderItem({item, SubList}) {
   const knownChildren = listsState[item.id]?.children ?? null;
   const [isActive, setIsActive] = useState(!!isAlreadyOpen);
   const [children, setChildren] = useState({isSet: false, list: knownChildren});
+  const [isLoading, setIsLoading] = useState(false);
 
   const previousStates = useRef({children, isActive});
 
@@ -53,14 +54,16 @@ function FolderItem({item, SubList}) {
       faIcon = faFolder;
   }
 
-  const icon = <FontAwesomeIcon icon={faIcon} size="xs" />;
+  const icon = <FontAwesomeIcon icon={faIcon} size="xs" className="title" />;
 
   const toggleActive = () => {
     setIsActive((state) => !state);
 
     if (item.children && !children.isSet) {
+      setIsLoading(true);
       fetchData(item.id)
         .then((res) => {
+          setIsLoading(false);
           setChildren({isSet: true, list: res.children ?? null})
         })
     }
@@ -69,10 +72,10 @@ function FolderItem({item, SubList}) {
   const button = faIcon === faFolder
     ? (
       <button
-        className={`marker${isActive ? ' marker--active' : ''} btn position-absolute p-0`}
+        className={`marker${isActive ? ' marker--active' : ''}${isLoading ? ' loader text-info': ''} btn position-absolute p-0`}
         onClick={toggleActive}
       >
-        ▸
+        {isLoading ? '◖' : '▸'}
       </button>
     )
     : null;
