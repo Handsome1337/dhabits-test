@@ -1,10 +1,18 @@
 import FolderItem from '../FolderItem/FolderItem';
 
-function FolderList() {
+function FolderList({data}) {
+  if (!data) {
+    return null;
+  }
+
   return (
-    <ul className="list-group w-25">
+    <ul className="list-group">
       {
-        ['Один', 'Два', 'Три'].map((it) => <FolderItem key={it} text={it} />)
+        data.map((it) => (
+          <FolderItem key={it.id} item={it}>
+            <FolderList data={it.children} />
+          </FolderItem>
+        ))
       }
     </ul>
   );

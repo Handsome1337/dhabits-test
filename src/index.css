@@ -1,0 +1,12 @@
+.marker {
+  left: 5px;
+  transition: transform 0.2s;
+}
+
+.marker--active {
+  transform: rotate(90deg);
+}
+
+.marker:focus {
+  box-shadow: none;
+}
